@@ -1,0 +1,52 @@
+# Region
+region = "ap-southeast-1"
+# VPC related variables
+vpc_name        = "kai-vpc"
+vpc_cidr        = "10.0.0.0/16"
+public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+
+enable_nat_gateway   = true
+single_nat_gateway   = true
+enable_dns_hostnames = true
+enable_dns_support   = true
+
+public_subnet_tags = {
+  "kubernetes.io/role/elb" = 1
+}
+private_subnet_tags = {
+  "kubernetes.io/role/internal-elb" = 1
+}
+# EKS related variables
+kubernetes_version                       = "1.33"
+cluster_endpoint_public_access           = true
+cluster_endpoint_private_access          = true
+enable_cluster_creator_admin_permissions = true
+
+# EKS Managed Node Group related variables
+eks_managed_node_group_defaults = {
+  # [AWS documentation](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) for valid values"
+  ami_type = "AL2023_x86_64_STANDARD" #AL2_x86_64 supports kubernetes 1.32 or earlier
+}
+
+eks_managed_node_groups = {
+  one = {
+    name = "node-group-1"
+
+    instance_types = ["t3.small"]
+
+    min_size     = 1
+    max_size     = 3
+    desired_size = 1
+  }
+
+  two = {
+    name = "node-group-2"
+
+    instance_types = ["t3.small"]
+
+    min_size     = 1
+    max_size     = 3
+    desired_size = 1
+  }
+}
